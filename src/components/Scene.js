@@ -1,6 +1,6 @@
 // Cleaned up unused imports
 import { useScroll, Stars, Sparkles } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import OrganicShape from './OrganicShape'
 import { Environment } from '@react-three/drei'
@@ -8,6 +8,10 @@ import { Environment } from '@react-three/drei'
 export default function Scene() {
     const scroll = useScroll()
     const group = useRef()
+    const { viewport } = useThree()
+
+    // Simple mobile check based on viewport width
+    const isMobile = viewport.width < 5
 
     useFrame((state, delta) => {
         if (group.current) {
@@ -16,7 +20,8 @@ export default function Scene() {
 
             // Move scene UP as we scroll DOWN to reveal objects placed lower in Y-axis
             // Objects go down to roughly -20, so we move up by roughly 20-22 units
-            group.current.position.y = scroll.offset * 22
+            // On mobile, the scroll might be longer, so we adjust accordingly
+            group.current.position.y = scroll.offset * (isMobile ? 24 : 22)
         }
     })
 
@@ -35,19 +40,57 @@ export default function Scene() {
             <Environment preset="city" />
 
             {/* HERO SECTION - Big Liquid Main Object */}
-            <OrganicShape position={[3.5, 0, 0]} scale={2} color="#8b5cf6" speed={1} />
-            <OrganicShape position={[-4, -2, -2]} scale={1.5} color="#06b6d4" speed={1.5} />
+            {/* On mobile: Center the main object. On Desktop: Keep it to the side */}
+            <OrganicShape
+                position={isMobile ? [0, 0, 0] : [3.5, 0, 0]}
+                scale={isMobile ? 1.5 : 2}
+                color="#8b5cf6"
+                speed={1}
+            />
+            {/* Secondary Hero Shape */}
+            <OrganicShape
+                position={isMobile ? [-1.5, -2, -2] : [-4, -2, -2]}
+                scale={isMobile ? 1 : 1.5}
+                color="#06b6d4"
+                speed={1.5}
+            />
 
             {/* Work Section Area */}
-            <OrganicShape position={[-3, -8, 2]} scale={1.2} color="#ec4899" speed={0.8} />
-            <OrganicShape position={[3, -10, 0]} scale={1.8} color="#10b981" speed={1.2} />
+            <OrganicShape
+                position={isMobile ? [1.5, -8, 0] : [-3, -8, 2]}
+                scale={isMobile ? 1 : 1.2}
+                color="#ec4899"
+                speed={0.8}
+            />
+            <OrganicShape
+                position={isMobile ? [-1, -11, 0] : [3, -10, 0]}
+                scale={isMobile ? 1.2 : 1.8}
+                color="#10b981"
+                speed={1.2}
+            />
 
             {/* About Section Area */}
-            <OrganicShape position={[0, -18, -2]} scale={2.5} color="#f59e0b" speed={0.5} />
+            <OrganicShape
+                position={[0, -18, -2]}
+                scale={isMobile ? 1.8 : 2.5}
+                color="#f59e0b"
+                speed={0.5}
+            />
 
             {/* Contact Section Area - Moved items out to avoid text overlap */}
-            <OrganicShape position={[-6, -19, 2]} scale={1.5} color="#6366f1" speed={1} />
-            <OrganicShape position={[6, -20, 0]} scale={2} color="#ec4899" speed={1.5} />
+            {/* On mobile: Push them vertical or very far to sides to not block "Start a Conversation" */}
+            <OrganicShape
+                position={isMobile ? [-2, -22, 0] : [-6, -19, 2]}
+                scale={isMobile ? 1.2 : 1.5}
+                color="#6366f1"
+                speed={1}
+            />
+            <OrganicShape
+                position={isMobile ? [2, -24, 0] : [6, -20, 0]}
+                scale={isMobile ? 1.5 : 2}
+                color="#ec4899"
+                speed={1.5}
+            />
 
         </group>
     )

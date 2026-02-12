@@ -10,6 +10,22 @@ import Contact from "./components/Contact"
 import Cursor from "./components/Cursor"
 
 export default function Portfolio() {
+  // Mobile detection for scroll length
+  const [isMobile, setIsMobile] = React.useState(false)
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    // Check initially
+    checkMobile()
+
+    // Check on resize
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   const projects = [
     {
       title: "Neuro-Inclusive Education",
@@ -49,7 +65,12 @@ export default function Portfolio() {
         style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "#050505" }}
       >
         <Suspense fallback={null}>
-          <ScrollControls pages={5} damping={0.2} style={{ scrollbarWidth: "none" }}>
+          {/* 
+            Adjust pages based on device. 
+            Mobile (vertical layout) needs more scroll distance (e.g., 7-8 pages).
+            Desktop (grid layout) fits in less (5 pages).
+          */}
+          <ScrollControls pages={isMobile ? 7.5 : 5} damping={0.2} style={{ scrollbarWidth: "none" }}>
 
             {/* 3D SCENE CONTENT THAT MOVES WITH SCROLL */}
             <Scene />
