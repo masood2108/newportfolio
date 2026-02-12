@@ -1,4 +1,5 @@
-import { useScroll, Stars, Float, Sparkles } from '@react-three/drei'
+// Cleaned up unused imports
+import { useScroll, Stars, Sparkles } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import OrganicShape from './OrganicShape'

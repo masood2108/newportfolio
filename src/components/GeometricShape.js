@@ -1,11 +1,14 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float, MeshTransmissionMaterial } from '@react-three/drei'
-import * as THREE from 'three'
 
 export default function GeometricShape({ position, color, geometry: Geometry = 'box', scale = 1 }) {
     const mesh = useRef()
     const [hovered, setHover] = useState(false)
+
+    useEffect(() => {
+        console.log("GeometricShape mounted")
+    }, [])
 
     useFrame((state, delta) => {
         if (mesh.current) {
