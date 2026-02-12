@@ -12,6 +12,17 @@
 @tailwind components;
 @tailwind utilities;
 
+::selection {
+  background-color: #8b5cf6; /* violet-500 */
+  color: #ffffff;
+}
+
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #050505;
+    cursor: default; /* Can switch to none if custom cursor is added */
 }
